@@ -226,8 +226,8 @@
   </div>
 
   <script>
-    // الرابط المباشر الجديد الخاص بك
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYQgGPl25zLaIShrEIiev0oCjquVd4Xmaqf78x8EmPIIH8qQJtQiol4S8rzzYHpSYd/exec";
+    // الرابط المباشر لـ Apps Script الخاص بك
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwmjsJFyezsgkNIeR1HmeZ6WIf_1bj6dua1Jd25Yr-DEWm3IZ1NKjbZqs9yaKpnYsaZ/exec";
 
     let currentTab = "guest";
 
@@ -282,7 +282,7 @@
       }
 
       submitBtn.disabled = true;
-      submitBtn.innerText = "جاري التحقق وإرسال الطلب...";
+      submitBtn.innerText = "جاري إرسال الطلب...";
 
       fetch(SCRIPT_URL, {
         method: "POST",
@@ -301,14 +301,14 @@
           }
           showAlert(msg, "success");
           document.getElementById("notes").value = "";
-        } else if (data.status === "error") {
+        } else {
           showAlert(data.message, "danger");
         }
       })
       .catch(error => {
         submitBtn.disabled = false;
         submitBtn.innerText = "🚀 إرسال الطلب";
-        showAlert("حدث خطأ أثناء الاتصال بالنظام، يرجى المحاولة لاحقاً.", "danger");
+        showAlert("حدث خطأ أثناء الاتصال بالخادم!", "danger");
       });
     }
 
