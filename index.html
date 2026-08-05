@@ -158,8 +158,8 @@
 <script>
   let userType = 'guest';
   let selectedDrink = '';
-  // الرابط الجديد الخاص بك المحدث:
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz8nPAZAGcs_jfSOgVY0VL1s4ZeyIkH0syoo2ht5dB-TQMxHqQNuQBZOSzRmSIuax0EPw/exec";
+  // تم ربط الرابط الجديد المحدث هنا:
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVTi26zsU8uX-JgqM55VzWUVaJn3MoIdHml_zDFZtTcJCmUMZlyGXCWMGSsr5irLvdQA/exec";
 
   function setType(type) {
     userType = type;
@@ -241,8 +241,9 @@
       mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(payload)
-    })
-    .then(() => {
+    });
+
+    setTimeout(() => {
       document.getElementById('orderForm').style.display = 'none';
       document.getElementById('typeSelector').style.display = 'none';
 
@@ -250,12 +251,7 @@
       statusDiv.innerHTML = `✅ <strong>تم إرسال الطلب بنجاح!</strong><br><small>(${fullDrinkDetails})</small><br>⏱️ جارِ التحضير والتسليم للبوفيه.`;
       statusDiv.style.display = 'block';
       document.getElementById('resetBtn').style.display = 'block';
-    })
-    .catch(err => {
-      alert("حدث خطأ، يرجى إعادة المحاولة!");
-      btn.disabled = false;
-      btn.innerText = "إرسال الطلب 🚀";
-    });
+    }, 1000);
   }
 
   function resetForm() {
