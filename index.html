@@ -226,8 +226,8 @@
   </div>
 
   <script>
-    // الرابط المباشر الجديد الخاص بك
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyc_JDhgIH5YuZ451wfSTDZe1rgvyRc-__X6xujDsVnlKRkj11oUdq3wxBIQe7tFUA/exec";
+    // الرابط الجديد الخاص بك
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAZnUAsr8R1fXuRru3dp6pUalFsgtnsn-hjev-UdJchB7rAZAP_RJD1babfirsbFs6/exec";
 
     let currentTab = "guest";
 
@@ -302,7 +302,6 @@
           showAlert(msg, "success");
           document.getElementById("notes").value = "";
         } else if (data.status === "error") {
-          // في حالة نفاد الرصيد أو الخطأ يتم عرض الرسالة باللون الأحمر مباشرة
           showAlert(data.message, "danger");
         }
       })
