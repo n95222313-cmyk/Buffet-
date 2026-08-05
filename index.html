@@ -226,8 +226,8 @@
   </div>
 
   <script>
-    // الرابط المباشر لـ Apps Script الخاص بك
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxBoHWzf6G5S1KGIQdYmZZNAGBLHrwroXBoYonV53w6-GeWhlLwXW6EtM-9Jq7u3w69/exec";
+    // الرابط المباشر الجديد الخاص بك
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyc_JDhgIH5YuZ451wfSTDZe1rgvyRc-__X6xujDsVnlKRkj11oUdq3wxBIQe7tFUA/exec";
 
     let currentTab = "guest";
 
@@ -282,7 +282,7 @@
       }
 
       submitBtn.disabled = true;
-      submitBtn.innerText = "جاري إرسال الطلب...";
+      submitBtn.innerText = "جاري التحقق وإرسال الطلب...";
 
       fetch(SCRIPT_URL, {
         method: "POST",
@@ -301,14 +301,15 @@
           }
           showAlert(msg, "success");
           document.getElementById("notes").value = "";
-        } else {
+        } else if (data.status === "error") {
+          // في حالة نفاد الرصيد أو الخطأ يتم عرض الرسالة باللون الأحمر مباشرة
           showAlert(data.message, "danger");
         }
       })
       .catch(error => {
         submitBtn.disabled = false;
         submitBtn.innerText = "🚀 إرسال الطلب";
-        showAlert("حدث خطأ أثناء الاتصال بالخادم!", "danger");
+        showAlert("حدث خطأ أثناء الاتصال بالنظام، يرجى المحاولة لاحقاً.", "danger");
       });
     }
 
