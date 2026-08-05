@@ -226,8 +226,8 @@
   </div>
 
   <script>
-    // الرابط المباشر الجديد المربوط بشيت Talbat والتحويل التلقائي لرقم الواتساب بكود الدولة
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLd_v625kTFPZqgR1ajn0kJ6_N-kddx2XvbzUaXoRUf-Jg-J5ZVoNBM89ZefhY7PyU/exec";
+    // الرابط المباشر الجديد الخاص بك
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYSj-WIx8s-eWHfwTvq7UEuePezs-pEpqydw6KkieFu6RkJOquvXJ2OdOtZFP76poQ/exec";
 
     let currentTab = "guest";
 
@@ -282,24 +282,33 @@
       }
 
       submitBtn.disabled = true;
-      submitBtn.innerText = "جاري التأكد وإرسال الطلب...";
+      submitBtn.innerText = "جاري التحقق وإرسال الطلب...";
 
       fetch(SCRIPT_URL, {
         method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(payload)
       })
-      .then(() => {
+      .then(response => response.json())
+      .then(data => {
         submitBtn.disabled = false;
         submitBtn.innerText = "🚀 إرسال الطلب";
-        showAlert("تم إرسال الطلب بنجاح إلى البوفيه!", "success");
-        document.getElementById("notes").value = "";
+
+        if (data.status === "success") {
+          let msg = data.message;
+          if (currentTab === "employee" && data.remainingBalance !== undefined) {
+            msg += ` (الرصيد المتبقي: ${data.remainingBalance})`;
+          }
+          showAlert(msg, "success");
+          document.getElementById("notes").value = "";
+        } else if (data.status === "error") {
+          showAlert(data.message, "danger");
+        }
       })
       .catch(error => {
         submitBtn.disabled = false;
         submitBtn.innerText = "🚀 إرسال الطلب";
-        showAlert("حدث خطأ أثناء الإرسال، يرجى إعادة المحاولة.", "danger");
+        showAlert("حدث خطأ أثناء الاتصال بالنظام، يرجى المحاولة لاحقاً.", "danger");
       });
     }
 
