@@ -226,7 +226,8 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsQdrXfEfvW3N_PN_S17fYXfrdyf3gggSEnQ3Pk4XPamOg8hhGgg6GrEQHxnP6qCLq/exec";
+    // الرابط المباشر الجديد المربوط بشيت Talbat والتحويل التلقائي لرقم الواتساب بكود الدولة
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLd_v625kTFPZqgR1ajn0kJ6_N-kddx2XvbzUaXoRUf-Jg-J5ZVoNBM89ZefhY7PyU/exec";
 
     let currentTab = "guest";
 
@@ -283,7 +284,6 @@
       submitBtn.disabled = true;
       submitBtn.innerText = "جاري التأكد وإرسال الطلب...";
 
-      // الإرسال بنمط no-cors للتحايل على قيود حظر الاتصال في المتصفح
       fetch(SCRIPT_URL, {
         method: "POST",
         mode: "no-cors",
