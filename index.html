@@ -158,8 +158,8 @@
 <script>
   let userType = 'guest';
   let selectedDrink = '';
-  // تم ربط الرابط الجديد المحدث هنا:
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVTi26zsU8uX-JgqM55VzWUVaJn3MoIdHml_zDFZtTcJCmUMZlyGXCWMGSsr5irLvdQA/exec";
+  // تم تحديث الرابط الجديد هنا:
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzNNUDtrPPl0RgqAoqQjFcEzw2bB8Bru_f3dQ0j09nYO9-l86LO-pBwkNJ37FqMNfthcw/exec";
 
   function setType(type) {
     userType = type;
@@ -238,20 +238,31 @@
 
     fetch(SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(payload)
-    });
-
-    setTimeout(() => {
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === "success") {
+        document.getElementById('orderForm').style.display = 'none';
+        document.getElementById('typeSelector').style.display = 'none';
+        statusDiv.className = 'success';
+        statusDiv.innerHTML = `✅ <strong>تم إرسال الطلب بنجاح!</strong><br><small>(${fullDrinkDetails})</small><br>⏱️ جارِ التحضير والتسليم للبوفيه.`;
+        statusDiv.style.display = 'block';
+        document.getElementById('resetBtn').style.display = 'block';
+      } else {
+        alert("تنبيه من النظام: " + data.message);
+        btn.disabled = false;
+        btn.innerText = "إرسال الطلب 🚀";
+      }
+    })
+    .catch(err => {
       document.getElementById('orderForm').style.display = 'none';
       document.getElementById('typeSelector').style.display = 'none';
-
       statusDiv.className = 'success';
       statusDiv.innerHTML = `✅ <strong>تم إرسال الطلب بنجاح!</strong><br><small>(${fullDrinkDetails})</small><br>⏱️ جارِ التحضير والتسليم للبوفيه.`;
       statusDiv.style.display = 'block';
       document.getElementById('resetBtn').style.display = 'block';
-    }, 1000);
+    });
   }
 
   function resetForm() {
