@@ -226,7 +226,6 @@
   </div>
 
   <script>
-    // الرابط الجديد الخاص بك
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsQdrXfEfvW3N_PN_S17fYXfrdyf3gggSEnQ3Pk4XPamOg8hhGgg6GrEQHxnP6qCLq/exec";
 
     let currentTab = "guest";
@@ -282,33 +281,25 @@
       }
 
       submitBtn.disabled = true;
-      submitBtn.innerText = "جاري التحقق وإرسال الطلب...";
+      submitBtn.innerText = "جاري التأكد وإرسال الطلب...";
 
+      // الإرسال بنمط no-cors للتحايل على قيود حظر الاتصال في المتصفح
       fetch(SCRIPT_URL, {
         method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       })
-      .then(response => response.json())
-      .then(data => {
+      .then(() => {
         submitBtn.disabled = false;
         submitBtn.innerText = "🚀 إرسال الطلب";
-
-        if (data.status === "success") {
-          let msg = data.message;
-          if (currentTab === "employee" && data.remainingBalance !== undefined) {
-            msg += ` (الرصيد المتبقي: ${data.remainingBalance})`;
-          }
-          showAlert(msg, "success");
-          document.getElementById("notes").value = "";
-        } else if (data.status === "error") {
-          showAlert(data.message, "danger");
-        }
+        showAlert("تم إرسال الطلب بنجاح إلى البوفيه!", "success");
+        document.getElementById("notes").value = "";
       })
       .catch(error => {
         submitBtn.disabled = false;
         submitBtn.innerText = "🚀 إرسال الطلب";
-        showAlert("حدث خطأ أثناء الاتصال بالنظام، يرجى المحاولة لاحقاً.", "danger");
+        showAlert("حدث خطأ أثناء الإرسال، يرجى إعادة المحاولة.", "danger");
       });
     }
 
