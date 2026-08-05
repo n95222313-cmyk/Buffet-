@@ -3,170 +3,325 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نظام طلب المشروبات - البوفيه</title>
+  <title>طلب مشروب من البوفيه</title>
   <style>
-    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: #f4f7f6; margin: 0; padding: 20px; display: flex; justify-content: center; }
-    .container { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 480px; }
-    h2 { text-align: center; color: #333; margin-bottom: 20px; }
-    .tab-buttons { display: flex; gap: 10px; margin-bottom: 20px; }
-    .tab-btn { flex: 1; padding: 10px; border: 2px solid #007bff; background: white; color: #007bff; border-radius: 6px; font-weight: bold; cursor: pointer; }
-    .tab-btn.active { background: #007bff; color: white; }
-    .form-group { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 5px; font-weight: 600; color: #555; }
-    input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
-    button[type="submit"] { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-    button[type="submit"]:hover { background: #218838; }
-    button:disabled { background: #6c757d; cursor: not-allowed; }
-    .hidden { display: none; }
-    #statusMsg { margin-top: 15px; text-align: center; font-weight: bold; padding: 12px; border-radius: 6px; }
-    .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-    .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 25px;
+    }
+
+    .tab-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #007bff;
+      background: #ffffff;
+      color: #007bff;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn.active {
+      background: #007bff;
+      color: #ffffff;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #cccccc;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #007bff;
+    }
+
+    textarea {
+      resize: vertical;
+      height: 70px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s;
+    }
+
+    .submit-btn:hover {
+      background-color: #218838;
+    }
+
+    .submit-btn:disabled {
+      background-color: #6c757d;
+      cursor: not-allowed;
+    }
+
+    .alert {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      text-align: center;
+      font-weight: 600;
+      display: none;
+    }
+
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <h2>☕ طلب مشروب من البوفيه</h2>
+  <div class="card">
+    <div class="title">☕ طلب مشروب من البوفيه</div>
 
-  <div class="tab-buttons">
-    <button type="button" class="tab-btn active" onclick="switchTab('employee')">موظف بالشركة</button>
-    <button type="button" class="tab-btn" onclick="switchTab('guest')">ضيف / اجتماع</button>
+    <div class="tab-buttons">
+      <button type="button" class="tab-btn active" id="btn-guest" onclick="switchTab('guest')">ضيف / اجتماع</button>
+      <button type="button" class="tab-btn" id="btn-emp" onclick="switchTab('employee')">موظف بالشركة</button>
+    </div>
+
+    <form id="orderForm" onsubmit="handleFormSubmit(event)">
+      
+      <!-- قسم الضيف -->
+      <div id="section-guest">
+        <div class="form-group">
+          <label>اسم الضيف:</label>
+          <input type="text" id="guestName" placeholder="الاسم بالكامل">
+        </div>
+
+        <div class="form-group">
+          <label>اسم الشركة / الجهة:</label>
+          <input type="text" id="company" placeholder="اسم الشركة">
+        </div>
+
+        <div class="form-group">
+          <label>رقم الهاتف:</label>
+          <input type="tel" id="phone" placeholder="01xxxxxxxxx">
+        </div>
+      </div>
+
+      <!-- قسم الموظف -->
+      <div id="section-employee" style="display: none;">
+        <div class="form-group">
+          <label>الرقم الوظيفي (ID):</label>
+          <input type="number" id="empId" placeholder="مثال: 1001">
+        </div>
+
+        <div class="form-group">
+          <label>كلمة السر:</label>
+          <input type="password" id="password" placeholder="****">
+        </div>
+      </div>
+
+      <!-- الحقول المشتركة -->
+      <div class="form-group">
+        <label>المكان / المكتب:</label>
+        <input type="text" id="location" placeholder="مثال: مكتب 204 / غرفة الاجتماعات" required>
+      </div>
+
+      <div class="form-group">
+        <label>اختر المشروب:</label>
+        <select id="drink" required>
+          <option value="">-- اختر المشروب --</option>
+          <option value="شاي أحمر">شاي أحمر</option>
+          <option value="قهوة تركي">قهوة تركي</option>
+          <option value="قهوة فرنساوي">قهوة فرنساوي</option>
+          <option value="شاي بلبن">شاي بلبن</option>
+          <option value="ينسون">ينسون</option>
+          <option value="نعناع">نعناع</option>
+          <option value="مياه معدنية">مياه معدنية</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>مستوى السكر:</label>
+        <select id="sugar" required>
+          <option value="بدون سكر">بدون سكر</option>
+          <option value="ع الريحة">ع الريحة</option>
+          <option value="مظبوط (1 معلقة)">مظبوط (1 معلقة)</option>
+          <option value="زيادة (2 معلقة)">زيادة (2 معلقة)</option>
+          <option value="زيادة جداً (3 معالق)">زيادة جداً (3 معالق)</option>
+          <option value="خارجي">سكر خارجي</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>ملاحظات إضافية:</label>
+        <textarea id="notes" placeholder="أي تفاصيل خاصة..."></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">🚀 إرسال الطلب</button>
+    </form>
+
+    <div id="alertBox" class="alert"></div>
   </div>
 
-  <form id="orderForm">
-    <div id="employeeFields">
-      <div class="form-group">
-        <label>الرقم الوظيفي (ID):</label>
-        <input type="text" id="empId" placeholder="مثال: 1001">
-      </div>
-      <div class="form-group">
-        <label>كلمة السر:</label>
-        <input type="password" id="password" placeholder="••••">
-      </div>
-    </div>
+  <script>
+    // الرابط المباشر لـ Apps Script الخاص بك
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxBoHWzf6G5S1KGIQdYmZZNAGBLHrwroXBoYonV53w6-GeWhlLwXW6EtM-9Jq7u3w69/exec";
 
-    <div id="guestFields" class="hidden">
-      <div class="form-group">
-        <label>اسم الضيف:</label>
-        <input type="text" id="guestName" placeholder="الاسم بالكامل">
-      </div>
-      <div class="form-group">
-        <label>اسم الشركة / الجهة:</label>
-        <input type="text" id="company" placeholder="اسم الشركة">
-      </div>
-      <div class="form-group">
-        <label>رقم الهاتف:</label>
-        <input type="tel" id="phone" placeholder="01xxxxxxxxx">
-      </div>
-    </div>
+    let currentTab = "guest";
 
-    <div class="form-group">
-      <label>المكان / المكتب:</label>
-      <input type="text" id="location" required placeholder="مثال: مكتب 204 / غرفة الاجتماعات">
-    </div>
+    function switchTab(tab) {
+      currentTab = tab;
+      const btnGuest = document.getElementById("btn-guest");
+      const btnEmp = document.getElementById("btn-emp");
+      const secGuest = document.getElementById("section-guest");
+      const secEmp = document.getElementById("section-employee");
 
-    <div class="form-group">
-      <label>اختر المشروب:</label>
-      <select id="drink" required>
-        <option value="">-- اختر المشروب --</option>
-        <option value="شاي أحمر">شاي أحمر</option>
-        <option value="قهوة تركي">قهوة تركي</option>
-        <option value="قهوة فرنساوي">قهوة فرنساوي</option>
-        <option value="شاي بلبن">شاي بلبن</option>
-        <option value="ينسون">ينسون</option>
-        <option value="نعناع">نعناع</option>
-        <option value="مياه معدنية">مياه معدنية</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>مستوى السكر:</label>
-      <select id="sugar" required>
-        <option value="بدون سكر">بدون سكر</option>
-        <option value="على الريحة">على الريحة</option>
-        <option value="مظبوط (1 معلقة)">مظبوط (1 معلقة)</option>
-        <option value="زيادة (2 معلقة)">زيادة (2 معلقة)</option>
-        <option value="سادة">سادة</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>ملاحظات إضافية:</label>
-      <textarea id="notes" rows="2" placeholder="أي تفاصيل خاصة..."></textarea>
-    </div>
-
-    <button type="submit" id="submitBtn">إرسال الطلب 🚀</button>
-  </form>
-
-  <div id="statusMsg" class="hidden"></div>
-</div>
-
-<script>
-  // الرابط الجديد الخاص بك
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhTHhy5cutLJa8ODEM6XkqtVhpmcWOv1P9TSpTcze7zwyeH8MRd0-7in5dYqHF2udR/exec"; 
-
-  let currentType = 'employee';
-
-  function switchTab(type) {
-    currentType = type;
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    
-    if (type === 'employee') {
-      document.querySelectorAll('.tab-btn')[0].classList.add('active');
-      document.getElementById('employeeFields').classList.remove('hidden');
-      document.getElementById('guestFields').classList.add('hidden');
-    } else {
-      document.querySelectorAll('.tab-btn')[1].classList.add('active');
-      document.getElementById('employeeFields').classList.add('hidden');
-      document.getElementById('guestFields').classList.remove('hidden');
+      if (tab === "guest") {
+        btnGuest.classList.add("active");
+        btnEmp.classList.remove("active");
+        secGuest.style.display = "block";
+        secEmp.style.display = "none";
+      } else {
+        btnEmp.classList.add("active");
+        btnGuest.classList.remove("active");
+        secGuest.style.display = "none";
+        secEmp.style.display = "block";
+      }
+      hideAlert();
     }
-  }
 
-  document.getElementById('orderForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const statusMsg = document.getElementById('statusMsg');
-    const submitBtn = document.getElementById('submitBtn');
-    
-    submitBtn.disabled = true;
-    submitBtn.innerText = "جاري إرسال الطلب...";
-    statusMsg.className = "hidden";
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById("submitBtn");
+      hideAlert();
 
-    const payload = {
-      userType: currentType,
-      empId: document.getElementById('empId').value,
-      password: document.getElementById('password').value,
-      guestName: document.getElementById('guestName').value,
-      company: document.getElementById('company').value,
-      phone: document.getElementById('phone').value,
-      location: document.getElementById('location').value,
-      drink: document.getElementById('drink').value,
-      sugar: document.getElementById('sugar').value,
-      notes: document.getElementById('notes').value
-    };
+      const payload = {
+        orderType: currentTab,
+        location: document.getElementById("location").value,
+        drink: document.getElementById("drink").value,
+        sugar: document.getElementById("sugar").value,
+        notes: document.getElementById("notes").value,
+        guestName: document.getElementById("guestName").value,
+        company: document.getElementById("company").value,
+        phone: document.getElementById("phone").value,
+        empId: document.getElementById("empId").value,
+        password: document.getElementById("password").value
+      };
 
-    fetch(SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-    .then(() => {
-      statusMsg.innerText = "تم إرسال الطلب بنجاح إلى البوفيه!";
-      statusMsg.className = "success";
-      document.getElementById('orderForm').reset();
-    })
-    .catch(error => {
-      statusMsg.innerText = "حدث خطأ أثناء الإرسال. يرجى المحاولة لاحقاً.";
-      statusMsg.className = "error";
-    })
-    .finally(() => {
-      submitBtn.disabled = false;
-      submitBtn.innerText = "إرسال الطلب 🚀";
-    });
-  });
-</script>
+      if (currentTab === "employee" && (!payload.empId || !payload.password)) {
+        showAlert("يرجى إدخال الرقم الوظيفي وكلمة السر!", "danger");
+        return;
+      }
 
+      if (currentTab === "guest" && !payload.guestName) {
+        showAlert("يرجى إدخال اسم الضيف!", "danger");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerText = "جاري إرسال الطلب...";
+
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.json())
+      .then(data => {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "🚀 إرسال الطلب";
+
+        if (data.status === "success") {
+          let msg = data.message;
+          if (currentTab === "employee" && data.remainingBalance !== undefined) {
+            msg += ` (الرصيد المتبقي: ${data.remainingBalance})`;
+          }
+          showAlert(msg, "success");
+          document.getElementById("notes").value = "";
+        } else {
+          showAlert(data.message, "danger");
+        }
+      })
+      .catch(error => {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "🚀 إرسال الطلب";
+        showAlert("حدث خطأ أثناء الاتصال بالخادم!", "danger");
+      });
+    }
+
+    function showAlert(msg, type) {
+      const box = document.getElementById("alertBox");
+      box.className = `alert alert-${type}`;
+      box.innerText = msg;
+      box.style.display = "block";
+    }
+
+    function hideAlert() {
+      document.getElementById("alertBox").style.display = "none";
+    }
+  </script>
 </body>
 </html>
